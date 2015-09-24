@@ -1,0 +1,17 @@
+<ion-view title="SQLite">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+	<label class="item item-input">
+	  <span class="input-label">To do</span>
+	  <input type="text" data-ng-model="sq.todo" data-ng-bind="sq.todo">
+	</label>
+    <button ng-click="sq.addTodo()" class="button button-block button-primary">Add Todo</button>
+    <ion-list>
+      <ion-item ng-repeat="item in sq.todos">
+        {{item.todo}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
