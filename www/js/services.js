@@ -1,3 +1,4 @@
+'use strict';
 angular.module('starter.services', [])
 
 .factory('CameraServices', ['$q', function ($q) {
@@ -31,7 +32,7 @@ angular.module('starter.services', [])
             return q.promise;
         }
 
-    }
+    };
 }])
 
 /**
@@ -63,5 +64,5 @@ angular.module('starter.services', [])
             // Simple index lookup
             return friends[friendId];
         }
-    }
+    };
 });

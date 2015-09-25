@@ -1,10 +1,11 @@
+'use strict';
 angular.module('starter.controllers', [])
 
 .config(function ($compileProvider) {
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
 })
 
-.controller('DashCtrl', function ($scope) {})
+.controller('DashCtrl', function () {})
 
 .controller('FriendsCtrl', function ($scope, Friends, Camera) {
     $scope.friends = Friends.all();
@@ -30,11 +31,11 @@ angular.module('starter.controllers', [])
           destinationType: Camera.DestinationType.DATA_URL
         });
         */
-    }
+    };
 })
 
 .controller('FriendDetailCtrl', function ($scope, $stateParams, Friends) {
     $scope.friend = Friends.get($stateParams.friendId);
 })
 
-.controller('AccountCtrl', function ($scope) {});
+.controller('AccountCtrl', function () {});

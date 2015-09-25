@@ -1,0 +1,29 @@
+{
+  "laxbreak": true,
+  "predef": [
+    "angular",
+    "rootang",
+    "console",
+    "alert",
+    "$",
+    "rimsExt",
+    "_",
+    "fnServerOData",
+    "kendo",
+    "escape",
+    "moment",
+    "prettyDate",
+    "notiPrettyDate",
+    "countdown",
+    "google",
+    "BigNumber",
+    "TweenMax",
+    "document",
+    "window",
+    "navigator",
+    "setInterval",
+    "setTimeout",
+    "cordova",
+    "StatusBar"
+  ]
+}

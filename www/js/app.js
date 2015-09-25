@@ -5,6 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
+
+'use strict';
 angular.module('starter', ['ionic', 'starter.services'])
 
 .config(function ($stateProvider, $urlRouterProvider, $compileProvider) {
@@ -13,65 +15,75 @@ angular.module('starter', ['ionic', 'starter.services'])
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile|content):|data:image\//);
 
     $stateProvider.state('app', {
-            url: "/app",
+            url: '/app',
             abstract: true,
-            templateUrl: "menu.html",
+            templateUrl: 'menu.html',
             controller: 'AppCtrl'
         })
         .state('app.camera', {
-            url: "/camera",
+            url: '/camera',
             views: {
                 'menuContent': {
-                    templateUrl: "camera.html",
+                    templateUrl: 'camera.html',
                     controller: 'CameraCtrl'
                 }
             }
         })
         .state('app.location', {
-            url: "/location",
+            url: '/location',
             views: {
                 'menuContent': {
-                    templateUrl: "location.html",
+                    templateUrl: 'location.html',
                     controller: 'LocationCtrl'
                 }
             }
         })
         .state('app.playlists', {
-            url: "/playlists",
+            url: '/playlists',
             views: {
                 'menuContent': {
-                    templateUrl: "playlists.html",
+                    templateUrl: 'playlists.html',
                     controller: 'PlaylistsCtrl'
                 }
             }
         })
         .state('app.single', {
-            url: "/playlists/:playlistId",
+            url: '/playlists/:playlistId',
             views: {
                 'menuContent': {
-                    templateUrl: "playlist.html",
+                    templateUrl: 'playlist.html',
                     controller: 'PlaylistCtrl'
                 }
             }
         })
         .state('app.sqlite', {
-            url: "/sqlite",
+            url: '/sqlite',
             views: {
                 'menuContent': {
-                    templateUrl: "sqlite.html",
+                    templateUrl: 'sqlite.html',
                     controller: 'SQLiteCtrl as sq'
                 }
             }
         })
         .state('app.map', {
-            url: "/map",
+            url: '/map',
             views: {
                 'menuContent': {
-                    templateUrl: "map.html",
+                    templateUrl: 'map.html',
                     controller: 'MapCtrl'
                 }
             }
+        })
+        .state('app.birthday', {
+            url: '/birthday',
+            views: {
+                'menuContent': {
+                    templateUrl: 'birthday.html',
+                    controller: 'BirthdayCtrl as bd'
+                }
+            }
         });
+
     $urlRouterProvider.otherwise('/app/playlists');
 })
 
@@ -88,7 +100,7 @@ angular.module('starter', ['ionic', 'starter.services'])
     });
 })
 
-.controller('AppCtrl', function ($scope) {})
+.controller('AppCtrl', function () {})
 
 .controller('PlaylistsCtrl', function ($scope) {
     $scope.playlists = [{
@@ -112,7 +124,7 @@ angular.module('starter', ['ionic', 'starter.services'])
     }];
 })
 
-.controller('PlaylistCtrl', function ($scope, $stateParams) {})
+.controller('PlaylistCtrl', function () {})
 
 .controller('CameraCtrl', function ($scope, CameraServices) {
 
@@ -135,9 +147,9 @@ angular.module('starter', ['ionic', 'starter.services'])
             console.log(imageURI);
 
             // var photo_split;
-            // if (imageURI.substring(0, 21) == "content://com.android") {
-            //     photo_split = imageURI.split("%3A");
-            //     imageURI = "content://media/external/images/media/" + photo_split[1];
+            // if (imageURI.substring(0, 21) == 'content://com.android') {
+            //     photo_split = imageURI.split('%3A');
+            //     imageURI = 'content://media/external/images/media/' + photo_split[1];
             // }
             // console.log(imageURI);
 
@@ -167,7 +179,7 @@ angular.module('starter', ['ionic', 'starter.services'])
             enableHighAccuracy: true
         };
         navigator.geolocation.getCurrentPosition($scope.onSuccess, function (message) {
-            alert("Failed to get the current position.");
+            alert('Failed to get the current position.');
             console.log(message);
         }, option);
     };
@@ -189,49 +201,49 @@ angular.module('starter', ['ionic', 'starter.services'])
     app.db = null;
 
     app.openDb = function () {
-        var dbName = "Todo.sqlite";
+        var dbName = 'Todo.sqlite';
         if (window.navigator.simulator === true) {
             // For debugin in simulator fallback to native SQL Lite
-            console.log("Use built in SQL Lite");
-            app.db = window.openDatabase(dbName, "1.0", "Cordova Demo", 200000);
+            console.log('Use built in SQL Lite');
+            app.db = window.openDatabase(dbName, '1.0', 'Cordova Demo', 200000);
         } else {
             app.db = window.sqlitePlugin.openDatabase(dbName);
         }
-    }
+    };
 
     app.createTable = function () {
         var db = app.db;
         db.transaction(function (tx) {
-            tx.executeSql("CREATE TABLE IF NOT EXISTS todo(ID INTEGER PRIMARY KEY ASC, todo TEXT, added_on DATETIME)", []);
+            tx.executeSql('CREATE TABLE IF NOT EXISTS todo(ID INTEGER PRIMARY KEY ASC, todo TEXT, added_on DATETIME)', []);
         });
-    }
+    };
 
     app.addTodo = function (todoText) {
         var db = app.db;
         db.transaction(function (tx) {
             var addedOn = new Date();
-            tx.executeSql("INSERT INTO todo(todo, added_on) VALUES (?,?)", [todoText, addedOn],
+            tx.executeSql('INSERT INTO todo(todo, added_on) VALUES (?,?)', [todoText, addedOn],
                 app.onSuccess,
                 app.onError);
         });
-    }
+    };
 
     app.onError = function (tx, e) {
-        console.log("Error: " + e.message);
-    }
+        console.log('Error: ' + e.message);
+    };
 
-    app.onSuccess = function (tx, r) {
+    app.onSuccess = function () {
         app.refresh();
-    }
+    };
 
     app.deleteTodo = function (id) {
         var db = app.db;
         db.transaction(function (tx) {
-            tx.executeSql("DELETE FROM todo WHERE ID=?", [id],
+            tx.executeSql('DELETE FROM todo WHERE ID=?', [id],
                 app.onSuccess,
                 app.onError);
         });
-    }
+    };
 
     app.refresh = function () {
         self.todos = [];
@@ -242,25 +254,25 @@ angular.module('starter', ['ionic', 'starter.services'])
                 // app.deleteTodo(rs.rows.item(i).ID);
             }
             $scope.$apply();
-        }
+        };
 
         var db = app.db;
         db.transaction(function (tx) {
-            tx.executeSql("SELECT * FROM todo", [],
+            tx.executeSql('SELECT * FROM todo', [],
                 render,
                 app.onError);
         });
-    }
+    };
 
     self.addTodo = function () {
         console.log(self.todo);
-        if (self.todo != "") {
+        if (self.todo !== '') {
             app.addTodo(self.todo);
         }
-        self.todo = "";
-    }
+        self.todo = '';
+    };
 
-    self.todo = "";
+    self.todo = '';
 
     // navigator.splashscreen.hide();
     app.openDb();
@@ -271,8 +283,8 @@ angular.module('starter', ['ionic', 'starter.services'])
 
 .controller('MapCtrl', function ($scope, $ionicLoading, $window, $q) {
     // function onDeviceReady() {
-    //     document.addEventListener("online", onOnline, false);
-    //     document.addEventListener("resume", onResume, false);
+    //     document.addEventListener('online', onOnline, false);
+    //     document.addEventListener('resume', onResume, false);
     //     loadMapsApi();
     // }
 
@@ -285,12 +297,12 @@ angular.module('starter', ['ionic', 'starter.services'])
     // }
 
     // function loadMapsApi() {
-    //     console.log("12144");
+    //     console.log('12144');
     //     // if online and maps not already loaded
     //     //    then load maps api
     // }
 
-    function lazyLoadApi(key) {
+    function lazyLoadApi() {
         var deferred = $q.defer();
         $window.initialize = function () {
             deferred.resolve();
@@ -311,7 +323,7 @@ angular.module('starter', ['ionic', 'starter.services'])
                 console.log('gmaps loaded');
                 onMapsApiLoaded();
             } else {
-                alert("gmaps not loaded");
+                alert('gmaps not loaded');
                 console.log('gmaps not loaded');
             }
         }, function () {
@@ -338,22 +350,88 @@ angular.module('starter', ['ionic', 'starter.services'])
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
 
-            var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
             $scope.map = map;
 
-            var marker = new google.maps.Marker({
+            new google.maps.Marker({
                 position: myLatlng,
                 map: map,
                 title: 'Your position!'
             });
 
         }, function (message) {
-            alert("Failed to get the current position.");
+            alert('Failed to get the current position.');
             console.log(message);
         }, option);
     }
 
-    // document.addEventListener("deviceready", onDeviceReady, false);
+    // document.addEventListener('deviceready', onDeviceReady, false);
 
 })
+
+.controller('BirthdayCtrl', ['$scope', '$ionicPopup', function ($scope, $ionicPopup) {
+    var self = this;
+    self.name = '';
+    self.birthday = '';
+
+    self.isDisableSubmit = function () {
+        if (self.name === '' || self.birthday === '' || self.birthday === null || typeof self.birthday === 'undefined') {
+            return true;
+        }
+        return false;
+    };
+
+    self.submit = function () {
+        if (!self.isDisableSubmit()) {
+            var message = '';
+            var toDay = new Date();
+
+            if (toDay < self.birthday) {
+                message = 'What do you mean \'You came from the future\'?';
+            } else {
+                var days = calculateNextBirthday(self.birthday, toDay);
+
+                if (days === 0) {
+                    message = 'Your birthday is today!';
+                } else {
+                    message = 'Your birthday will be in ' + days + ' days from now.';
+                }
+            }
+
+            var alertPopup = $ionicPopup.alert({
+                title: 'Hi ' + self.name + ',',
+                template: message
+            });
+
+            alertPopup.then(function () {
+                console.log('alert closed!');
+            });
+        }
+    };
+
+    function calculateNextBirthday(your_birthday, now) {
+        var month = your_birthday.getMonth();
+        var day = your_birthday.getDate();
+        var year = now.getFullYear();
+        your_birthday = new Date(year, month, day);
+
+        if (month == now.getMonth() && day == now.getDate()) {
+            return 0;
+        }
+
+        if (your_birthday < now) {
+            your_birthday = new Date(year + 1, month, day);
+        }
+
+        var diff = now - your_birthday;
+
+        return Math.abs(millisecondsToDays(diff));
+    }
+
+    function millisecondsToDays(milliseconds) {
+        var temp = Math.floor(milliseconds / 1000);
+        var days = Math.floor((temp %= 31536000) / 86400);
+        return days;
+    }
+}]);

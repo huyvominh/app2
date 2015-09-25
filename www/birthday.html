@@ -1,0 +1,18 @@
+<ion-view title="Birthday">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+    <label class="item item-input">
+	  <span class="input-label">Your Name</span>
+	  <input type="text" data-ng-model="bd.name" data-ng-bind="bd.name">
+	</label>
+	<label class="item item-input">
+	  <span class="input-label">Your Birthday</span>
+	  <input type="date" data-ng-model="bd.birthday" data-ng-bind="bd.birthday">
+	</label>
+	<button data-ng-disabled="bd.isDisableSubmit()" data-ng-click="bd.submit()" class="button button-full button-positive">
+	  Submit
+	</button>
+  </ion-content>
+</ion-view>
