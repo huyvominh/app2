@@ -24,6 +24,8 @@
     "setInterval",
     "setTimeout",
     "cordova",
-    "StatusBar"
+    "StatusBar",
+    "plugin",
+    "ionic"
   ]
 }

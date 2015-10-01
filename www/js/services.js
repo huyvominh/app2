@@ -5,6 +5,18 @@ angular.module('starter.services', [])
 
     return {
         takePhoto: function (options) {
+
+            options = {};
+            options.sourceType = navigator.camera.PictureSourceType.CAMERA;
+            options.destinationType = navigator.camera.DestinationType.FILE_URI;
+            options.saveToPhotoAlbum = true;
+            // options.quality = 75;
+            // options.targetWidth = 320;
+            // options.targetHeight = 320;
+            // console.log(navigator.camera.PictureSourceType.CAMERA);
+            // console.log(navigator.camera.DestinationType.FILE_URI);
+            // console.log(navigator.camera.PictureSourceType.SAVEDPHOTOALBUM);
+
             var q = $q.defer();
 
             navigator.camera.getPicture(function (result) {

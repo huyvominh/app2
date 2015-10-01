@@ -7,31 +7,65 @@
     <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
   </ion-pane>
 
-  <ion-side-menu side="left">
+  <ion-side-menu side="left" id="side_menu_left">
     <header class="bar bar-header bar-positive">
       <h1 class="title">Menu</h1>
     </header>
     <ion-content class="has-header">
       <ion-list>
-        <ion-item nav-clear menu-close href="#/app/camera">
-          Camera
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/location">
-          Location
-        </ion-item>
         <ion-item nav-clear menu-close href="#/app/sqlite">
           SQLite
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/map">
-          Map
         </ion-item>
         <ion-item nav-clear menu-close href="#/app/birthday">
           Birthday
         </ion-item>
-        <ion-item nav-clear menu-close href="#/app/playlists">
+        <ion-item nav-clear menu-close href="#/app/playlists" class="item item-icon-left">
+          <i class="icon ion-ios-musical-notes"></i>
           Playlists
         </ion-item>
+        <ion-item nav-clear menu-close href="#/app/camera" class="item item-icon-left">
+          <i class="icon ion-camera"></i>
+          Camera
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/location" class="item item-icon-left">
+          <i class="icon ion-location"></i>
+          Location
+        </ion-item>
+        <!--<ion-item nav-clear menu-close href="#/app/map" class="item item-icon-left">
+          <i class="icon ion-map"></i>
+          Map
+        </ion-item>-->
+        <ion-item nav-clear menu-close href="#/app/map-plugin" class="item item-icon-left">
+          <i class="icon ion-map"></i>
+          Map Plugin
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/notifications" class="item item-icon-left">
+          <i class="icon ion-ios-bell-outline"></i>
+          Push Notifications
+        </ion-item>
       </ion-list>
+      <div class="list">
+        <a class="item item-icon-left item-icon-right" href="#">
+          <i class="icon ion-chatbubble-working"></i>
+          Call Ma
+          <i class="icon ion-ios-telephone-outline"></i>
+        </a>
+
+        <a class="item item-icon-left" href="#">
+          <i class="icon ion-mic-a"></i>
+          Record album
+          <span class="item-note">
+            Grammy
+          </span>
+        </a>
+
+        <a class="item item-icon-left" href="#">
+          <i class="icon ion-person-stalker"></i>
+          Friends
+          <span class="badge badge-assertive">0</span>
+        </a>
+
+      </div>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>

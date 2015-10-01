@@ -5,6 +5,6 @@
   <ion-content class="has-header">
     <button ng-click="takePhoto()" class="button button-block button-primary">Take Photo</button>
     <button ng-click="getPhoto()" class="button button-block button-primary">Get Photo</button>
-    <img ng-src="{{lastPhoto}}" style="max-width: 100%">
+    <img ng-src="{{lastPhoto}}" style="max-width: 100%" ng-click="openImage()">
   </ion-content>
 </ion-view>
