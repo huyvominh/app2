@@ -100,6 +100,15 @@ angular.module('starter', ['ionic', 'starter.services'])
                     controller: 'NotificationsCtrl as nf'
                 }
             }
+        })
+        .state('app.canvas', {
+            url: '/canvas',
+            views: {
+                'menuContent': {
+                    templateUrl: 'canvas.html',
+                    controller: 'CanvasCtrl as cv'
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/app/map-plugin');
@@ -368,11 +377,11 @@ angular.module('starter', ['ionic', 'starter.services'])
         CameraServices.getPhoto().then(function (imageURI) {
             console.log(imageURI);
 
-            // var photo_split;
-            // if (imageURI.substring(0, 21) == 'content://com.android') {
-            //     photo_split = imageURI.split('%3A');
-            //     imageURI = 'content://media/external/images/media/' + photo_split[1];
-            // }
+            var photo_split;
+            if (imageURI.substring(0, 21) == 'content://com.android') {
+                photo_split = imageURI.split('%3A');
+                imageURI = 'content://media/external/images/media/' + photo_split[1];
+            }
             // console.log(imageURI);
 
             $scope.lastPhoto = imageURI;
@@ -393,6 +402,7 @@ angular.module('starter', ['ionic', 'starter.services'])
 
     $scope.openImage = function () {
         console.log($scope.lastPhoto);
+        window.plugins.fileOpener.open($scope.lastPhoto);
     };
 })
 
@@ -430,7 +440,6 @@ angular.module('starter', ['ionic', 'starter.services'])
     };
 
 })
-
 
 .controller('SQLiteCtrl', function ($scope) {
     var self = this;
@@ -746,4 +755,159 @@ angular.module('starter', ['ionic', 'starter.services'])
     }
 }])
 
-.controller('NotificationsCtrl', function () {});
+.controller('NotificationsCtrl', function () {})
+
+.controller('CanvasCtrl', function () {
+
+    var self = this;
+    var ctx, color = '#000';
+    var x, y;
+
+    // setup a new canvas for drawing wait for device init
+    setTimeout(function () {
+        self.newCanvas();
+    }, 1000);
+
+    // function to setup a new canvas for drawing
+    self.newCanvas = function () {
+        navigator.vibrate(300);
+        //define and resize canvas
+        document.getElementById('content').style.height = window.innerHeight - 90;
+        var canvas = '<canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 90) + '"></canvas>';
+        document.getElementById('content').innerHTML = canvas;
+
+        // setup canvas
+        ctx = document.getElementById('canvas').getContext('2d');
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        document.getElementById('canvas').style.backgroundImage = 'url(http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg)';
+        document.getElementById('canvas').style.backgroundRepeat = 'no-repeat';
+        document.getElementById('canvas').style.backgroundSize = '100% 100%';
+
+        // setup to trigger drawing on mouse or touch
+        self.drawTouch();
+        self.drawPointer();
+        self.drawMouse();
+    };
+
+    self.saveCanvas = function () {
+        var canvasSave = document.createElement('canvas');
+        canvasSave.width = window.innerWidth;
+        canvasSave.height = (window.innerHeight - 90);
+        var canvasSaveCtx = canvasSave.getContext ? canvasSave.getContext('2d') : null;
+
+        var imageObj = new Image();
+
+        imageObj.onload = function () {
+            canvasSaveCtx.drawImage(imageObj, 0, 0, window.innerWidth, window.innerHeight - 90);
+
+            var canvas = document.getElementById('canvas');
+            canvasSaveCtx.drawImage(canvas, 0, 0);
+
+            // var img = canvasSave.toDataURL('image/png');
+            // document.write('<img src="' + img + '"/>');
+
+            window.canvas2ImagePlugin.saveImageDataToLibrary(
+                function (msg) {
+                    alert(msg);
+                },
+                function (err) {
+                    alert(err);
+                },
+                canvasSave
+            );
+        };
+
+        imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
+    };
+
+    self.eraserLine = function () {
+        for (var i = 0; i < document.getElementsByClassName('palette').length; i++) {
+            document.getElementsByClassName('palette')[i].style.borderColor = '#777';
+            document.getElementsByClassName('palette')[i].style.borderStyle = 'solid';
+        }
+        ctx.lineWidth = 20;
+        ctx.globalCompositeOperation = 'destination-out';
+    };
+
+    self.selectColor = function (el) {
+        ctx.lineWidth = 2;
+        ctx.globalCompositeOperation = 'source-over';
+        el = el.target;
+        for (var i = 0; i < document.getElementsByClassName('palette').length; i++) {
+            document.getElementsByClassName('palette')[i].style.borderColor = '#777';
+            document.getElementsByClassName('palette')[i].style.borderStyle = 'solid';
+        }
+        el.style.borderColor = '#fff';
+        el.style.borderStyle = 'dashed';
+        color = window.getComputedStyle(el).backgroundColor;
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+    };
+
+    // prototype to start drawing on touch using canvas moveTo and lineTo
+    self.drawTouch = function () {
+        var start = function (e) {
+            ctx.beginPath();
+            x = e.changedTouches[0].pageX;
+            y = e.changedTouches[0].pageY - 88;
+            ctx.moveTo(x, y);
+        };
+        var move = function (e) {
+            e.preventDefault();
+            x = e.changedTouches[0].pageX;
+            y = e.changedTouches[0].pageY - 88;
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        };
+        document.getElementById('canvas').addEventListener('touchstart', start, false);
+        document.getElementById('canvas').addEventListener('touchmove', move, false);
+    };
+
+    // prototype to start drawing on pointer(microsoft ie) using canvas moveTo and lineTo
+    self.drawPointer = function () {
+        var start = function (e) {
+            e = e.originalEvent;
+            ctx.beginPath();
+            x = e.pageX;
+            y = e.pageY - 88;
+            ctx.moveTo(x, y);
+        };
+        var move = function (e) {
+            e.preventDefault();
+            e = e.originalEvent;
+            x = e.pageX;
+            y = e.pageY - 88;
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        };
+        document.getElementById('canvas').addEventListener('MSPointerDown', start, false);
+        document.getElementById('canvas').addEventListener('MSPointerMove', move, false);
+    };
+
+    // prototype to start drawing on mouse using canvas moveTo and lineTo
+    self.drawMouse = function () {
+        var clicked = 0;
+        var start = function (e) {
+            clicked = 1;
+            ctx.beginPath();
+            x = e.pageX;
+            y = e.pageY - 88;
+            ctx.moveTo(x, y);
+        };
+        var move = function (e) {
+            if (clicked) {
+                x = e.pageX;
+                y = e.pageY - 88;
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+        };
+        var stop = function () {
+            clicked = 0;
+        };
+        document.getElementById('canvas').addEventListener('mousedown', start, false);
+        document.getElementById('canvas').addEventListener('mousemove', move, false);
+        document.addEventListener('mouseup', stop, false);
+    };
+});
